@@ -1,8 +1,8 @@
 (function() {
 
   var request = require('request');
-  var logger = require('./logger');
-  var redis = require('./redis');
+  var logger = require('./util/logger');
+  var redis = require('.//util/redis');
 
   var jobRunner = function (newJob) {
 
