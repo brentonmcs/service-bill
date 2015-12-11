@@ -7,11 +7,16 @@
   var jobRunner = function (newJob) {
 
     var responseHandler = function (error, response, body) {
+      var result = {};
       if (error) {
-        logger.info("Error ", { name : newJob.name, code: error.code, responseTime: new Date() - start});
+        result = { name : newJob.name, code: error.code, responseTime: new Date() - start};
+        logger.info("Error ", result);
       } else {
-        logger.info("Success", {name : newJob.name, code: response.statusCode, responseTime: new Date() - start});
+        result = {name : newJob.name, code: response.statusCode, responseTime: new Date() - start};
+        logger.info("Success", result);
       }
+
+      redis.hset(newJob.name, start, result);
       scheduleJob(newJob);
     };
 
