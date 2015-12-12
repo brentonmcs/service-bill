@@ -6,9 +6,9 @@
   var _ = require('lodash');
 
   // Start Known Jobs
-  redis.hgetall('billsJobs', function (reply) {
+  redis.hgetall('billsServices', function (reply) {
     _.forEach(reply, function (item, key) {
-      jobRunner.scheduleJob(JSON.parse(item));
+      jobRunner.serviceJobs(JSON.parse(item));
     });
   });
 

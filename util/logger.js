@@ -5,7 +5,7 @@
     transports: [
       new(winston.transports.Console)({
         colorize: 'all',
-        timestamp: true      
+        timestamp: true
       }),
       new(winston.transports.File)({
         filename: 'logs/output.log',
@@ -15,6 +15,7 @@
     exceptionHandlers: [
       new(winston.transports.Console)({
         colorize: 'all',
+        humanReadableUnhandledException: true,
       }),
       new winston.transports.File({
         filename: 'logs/exceptions.log',

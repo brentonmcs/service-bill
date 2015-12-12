@@ -1,27 +1,37 @@
-(function() {
+(function () {
 
   var request = require('request');
   var logger = require('./util/logger');
   var redis = require('.//util/redis');
 
-  var jobRunner = function (newJob) {
+  var scheduleJob = function (scheduledJob, serviceName) {
+    setTimeout(function () {
+      var newJob = scheduledJob;
+      jobRunner(newJob, serviceName);
+    }, scheduledJob.timeout);
+  };
 
+  var jobRunner = function (newJob, serviceName) {
     var responseHandler = function (error, response, body) {
-      var result = {};
+      var result = {
+        name: newJob.name,
+        responseTime: new Date() - start,
+        start: start
+      };
+
       if (error) {
-        result = { name : newJob.name, code: error.code, responseTime: new Date() - start};
+        result.code = error.code;
         logger.info("Error ", result);
       } else {
-        result = {name : newJob.name, code: response.statusCode, responseTime: new Date() - start};
+        result.code = response.statusCode;
         logger.info("Success", result);
       }
 
-      redis.hset(newJob.name, start, result);
-      scheduleJob(newJob);
+      redis.hset(serviceName, start, result);
+      scheduleJob(newJob, serviceName);
     };
 
     var start = new Date();
-
     var options = {
       url: newJob.uri,
       headers: newJob.header
@@ -35,15 +45,11 @@
     }
   };
 
-  var scheduleJob = function (scheduledJob) {
-    setTimeout(function () {
-      var newJob = scheduledJob;
-      jobRunner(newJob);
-    }, scheduledJob.timeout);
-  };
+  module.exports.serviceJobs = function (service) {
 
-  module.exports = {
-    scheduleJob : scheduleJob
+    for (var i = 0; i < service.jobs.length; i++) {
+      jobRunner(service.jobs[i], service.name);
+    }
   };
 
 })();

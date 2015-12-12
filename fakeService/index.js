@@ -8,7 +8,7 @@
   app.post('/Account', function (req, res) {
     console.log(req.headers);
 
-    if (!req.headers['svc-channel']) {
+    if (!req.headers.channel) {
       res.status(400);
       res.send('None shall pass');
     } else {
@@ -16,7 +16,7 @@
     }
   });
 
-  app.get('/LiveStream', function (req, res) {
+  app.get('/History', function (req, res) {
     res.send('Hello World!');
   });
 

@@ -1,28 +1,36 @@
 (function () {
+  'use strict';
 
   var redis = require('./util/redis');
-  var jobListLegacy = [{
-    name: "GetAccount",
-    httpVerb: "GET",
-    uri: "http://localhost:3001/Account?clientId=123",
-    timeout: 1000
+
+  var services = [{
+    name: "AccountService",
+    jobs: [{
+      name: "GetAccount",
+      httpVerb: "GET",
+      uri: "http://localhost:3001/Account?clientId=123",
+      timeout: 40000
+    }, {
+      name: "CreateAccount",
+      httpVerb: "POST",
+      uri: "http://localhost:3001/Account",
+      timeout: 40000,
+      header: {
+        "channel": 302
+      }
+    }]
   }, {
-    name: "GetLiveStream",
-    httpVerb: "GET",
-    uri: "http://localhost:3001/LiveStream",
-    timeout: 4000
-  }, {
-    name: "CreateAccount",
-    httpVerb: "POST",
-    uri: "http://localhost:3001/Account",
-    timeout: 4000,
-    header: {
-      "svc-channel": 302
-    }
+    name: "HistoryService",
+    jobs: [{
+      name: "GetHistory",
+      httpVerb: "GET",
+      uri: "http://localhost:3001/History",
+      timeout: 40000
+    }]
   }];
 
-  for (var i = 0, len = jobListLegacy.length; i < len; i++) {
-      redis.hset('billsJobs', jobListLegacy[i].name, jobListLegacy[i]);
+  for (var i = 0, len = services.length; i < len; i++) {
+    redis.hset('billsServices', services[i].name, services[i]);
   }
 
 })();
