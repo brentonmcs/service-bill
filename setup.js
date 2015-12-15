@@ -9,12 +9,12 @@
       name: "GetAccount",
       httpVerb: "GET",
       uri: "http://localhost:3001/Account?clientId=123",
-      timeout: 40000
+      timeout: 4000
     }, {
       name: "CreateAccount",
       httpVerb: "POST",
       uri: "http://localhost:3001/Account",
-      timeout: 40000,
+      timeout: 4000,
       header: {
         "channel": 302
       }

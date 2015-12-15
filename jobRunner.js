@@ -36,6 +36,8 @@
       url: newJob.uri,
       headers: newJob.header
     };
+
+    console.log('test');
     if (newJob.httpVerb === "GET") {
       request.get(options, responseHandler);
     }

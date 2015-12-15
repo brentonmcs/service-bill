@@ -1,7 +1,14 @@
 (function () {
   'use strict';
 
-  var client = require('redis').createClient();
+  var Redis = require('ioredis');
+
+  var client = new Redis({
+    port: 7006,
+    host: '192.168.99.100'
+  });
+
+
   var logger = require('./logger');
   client.on('error', function (err) {
     logger.log('info', 'Redis Error', err);
@@ -29,7 +36,7 @@
     removeAll: function (callback) {
       client.flushall(callback);
     },
-    setDatabase: function(databaseVersion) {
+    setDatabase: function (databaseVersion) {
       client.select(databaseVersion);
     },
   };
