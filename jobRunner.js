@@ -37,7 +37,6 @@
       headers: newJob.header
     };
 
-    console.log('test');
     if (newJob.httpVerb === "GET") {
       request.get(options, responseHandler);
     }
@@ -48,7 +47,6 @@
   };
 
   module.exports.serviceJobs = function (service) {
-
     for (var i = 0; i < service.jobs.length; i++) {
       jobRunner(service.jobs[i], service.name);
     }

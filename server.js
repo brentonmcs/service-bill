@@ -2,6 +2,7 @@
   'use strict';
 
   var jobRunner = require('./jobRunner');
+
   var redis = require('./util/redis');
   var _ = require('lodash');
 
@@ -12,5 +13,6 @@
     });
   });
 
+  var healthMonitor = require('./healthMonitor');
   var routes = require('./routes');
 })();

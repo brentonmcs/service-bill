@@ -2,12 +2,9 @@
   'use strict';
 
   var Redis = require('ioredis');
+  var client = new Redis();
 
-  var client = new Redis({
-    port: 7006,
-    host: '192.168.99.100'
-  });
-
+  client.config('set', 'notify-keyspace-events', 'Ksh');
 
   var logger = require('./logger');
   client.on('error', function (err) {
@@ -39,5 +36,10 @@
     setDatabase: function (databaseVersion) {
       client.select(databaseVersion);
     },
+    subscribe: function (keyspace, callback) {
+      var pubsub = client.duplicate();
+      pubsub.psubscribe('__keyspace@*__:' + keyspace);
+      pubsub.on('pmessage',callback);
+    }
   };
 })();
