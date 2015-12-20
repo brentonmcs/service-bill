@@ -1,8 +1,6 @@
 (function () {
 
   var request = require('request');
-  var logger = require('./util/logger');
-  var redis = require('.//util/redis');
 
   var scheduleJob = function (scheduledJob, serviceName) {
     setTimeout(function () {
@@ -12,26 +10,14 @@
   };
 
   var jobRunner = function (newJob, serviceName) {
-    var responseHandler = function (error, response, body) {
-      var result = {
-        name: newJob.name,
-        responseTime: new Date() - start,
-        start: start
-      };
 
-      if (error) {
-        result.code = error.code;
-        logger.info("Error ", result);
-      } else {
-        result.code = response.statusCode;
-        logger.info("Success", result);
-      }
+    function responseHandler(error, response, body) {
 
-      redis.hset(serviceName, start, result);
-      scheduleJob(newJob, serviceName);
-    };
+      console.log(body);
+      require('./responseChecker').validateResponse(error, response, body, newJob, serviceName);
+    }
 
-    var start = new Date();
+    newJob.start = new Date();
     var options = {
       url: newJob.uri,
       headers: newJob.header
@@ -44,6 +30,8 @@
     if (newJob.httpVerb === "POST") {
       request.post(options, responseHandler);
     }
+
+    scheduleJob(newJob, serviceName);
   };
 
   module.exports.serviceJobs = function (service) {

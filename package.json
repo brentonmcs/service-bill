@@ -12,6 +12,7 @@
     "express": "^4.13.3",
     "express-request-id": "^1.1.0",
     "ioredis": "^1.13.0",
+    "jsonschema": "^1.0.2",
     "lodash": "^3.10.1",
     "lodash-math": "0.0.7",
     "request": "^2.67.0",

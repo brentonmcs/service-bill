@@ -22,9 +22,7 @@
     return healthCount > 5 ? 'red' : healthCount >= 1 ? 'amber' : 'green';
   }
 
-
   function recalculateService(serviceName) {
-    console.log('recalculating ' + serviceName);
     redis.hgetall(serviceName, function (reply) {
       var result = [];
       _.forEach(reply, function (item, key) {

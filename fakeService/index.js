@@ -2,7 +2,15 @@
   var app = require('express')();
 
   app.get('/Account', function (req, res) {
-    res.send('Hello World!');
+    res.send({
+      name : "Test Bob",
+      email : "test@bob.com",
+      address : {
+        street1 : "1 main street",
+        state : "NSW",
+        postcode: "2000"
+      }
+    });
   });
 
   app.post('/Account', function (req, res) {
